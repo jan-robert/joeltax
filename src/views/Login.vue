@@ -24,6 +24,7 @@
             class="justify-center"
         >
           <v-form
+            ref="form"
             v-model="valid"
             lazy-validation
           >
@@ -55,23 +56,21 @@
               >
               </v-text-field>
             </div>
-
-            <div class="text-center">
-              <v-btn
-                  :disabled="!valid"
-                  height="50"
-                  width="400"
-                  color="#8a73ff"
-                  @click="loginUser()"
-              >
-                  Log In
-              </v-btn>
-            </div>
-
-            <div class="text-center mt-16">
-              Don't have an account? <router-link class="router-link-color ml-2" to="/register">Sign up!</router-link>
-            </div>
           </v-form>
+          <div class="text-center">
+            <v-btn
+                :disabled="!valid"
+                height="50"
+                width="400"
+                color="#8a73ff"
+                @click="loginUser()"
+            >
+                Log In
+            </v-btn>
+          </div>
+          <div class="text-center mt-16">
+            Don't have an account? <router-link class="router-link-color ml-2" to="/register">Sign up!</router-link>
+          </div>
         </v-card>
     </v-row>
   </v-container>
@@ -102,29 +101,29 @@ export default {
     }),
     methods: {
         async loginUser() {
-            await firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-                .then(async () => {
-                    const delay = ms => new Promise(res => setTimeout(res, ms));
-                    this.snackbarTitle = 'Success'
-                    this.snackbarText = 'Redirecting to your dashboard.'
-                    this.snackbarIcon = 'mdi-check'
-                    this.showSnackbar = true
-                    await delay(2000)
-                    this.showSnackbar = false
-                    this.$router.push('/dashboard')
-                })
-                .catch(err => {
-                    this.snackbarTitle = 'Error'
-                    this.snackbarText = err.message
-                    this.snackbarIcon = 'mdi-close'
-                    this.showSnackbar = true
-                    setTimeout(function(){
-                        this.showSnackbar = false
-                    }, 3000)
-                });
-        },
-        printId() {
-            console.log('bruh')
+            const valid = this.$refs.form.validate()
+            if (valid) {
+              await firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+                  .then(async () => {
+                      const delay = ms => new Promise(res => setTimeout(res, ms));
+                      this.snackbarTitle = 'Success'
+                      this.snackbarText = 'Redirecting to your dashboard.'
+                      this.snackbarIcon = 'mdi-check'
+                      this.showSnackbar = true
+                      await delay(2000)
+                      this.showSnackbar = false
+                      this.$router.push('/dashboard')
+                  })
+                  .catch(err => {
+                      this.snackbarTitle = 'Error'
+                      this.snackbarText = err.message
+                      this.snackbarIcon = 'mdi-close'
+                      this.showSnackbar = true
+                      setTimeout(function(){
+                          this.showSnackbar = false
+                      }, 3000)
+                  });
+          }
         }
     }
 }

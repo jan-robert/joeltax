@@ -25,8 +25,8 @@ firebase.initializeApp(firebaseConfig)
 // Checks user auth before a the app is loaded from a refresh
 let app
 
+/*eslint-disable */
 firebase.auth().onAuthStateChanged(user => {
-  console.log(user)
   if (!app) {
     app = new Vue({
       router,
@@ -35,3 +35,4 @@ firebase.auth().onAuthStateChanged(user => {
     }).$mount('#app')
   }
 })
+/*eslint-enable */

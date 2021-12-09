@@ -2,7 +2,7 @@
   <v-container fill-height fluid>
     <v-row>
       <v-row justify="space-around">
-        <h1 class="mb-12 font-weight-light">Taxes are <span class="textHard">hard</span>. We make them <span class="textEasy">easy</span>.</h1>
+        <h1 class="mb-16 font-weight-light home-text">Taxes are <span class="text-hard">hard</span>. We make them <span class="text-easy">easy</span>.</h1>
       </v-row>
       <v-row justify="space-around">
         <div class="d-flex justify-center">
@@ -91,16 +91,19 @@ export default {
 </script>
 
 <style scoped>
-.textEasy {
+.home-text {
+  font-size: 2.75rem;
+}
+.text-easy {
   color: #62fc77;
 }
-.textHard {
+.text-hard {
   color: #ff6969;
 }
 .logo {
   -webkit-filter: grayscale(100%);
   filter: grayscale(100%);
-  opacity: 0.3;
+  opacity: 0.2;
 }
 .logo:hover {
   -webkit-filter: grayscale(0%);

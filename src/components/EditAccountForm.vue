@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height fluid>
+  <v-container class="ma-0 pa-0">
     <v-snackbar
       color="#8a73ff"
       multi-line
@@ -29,7 +29,7 @@
             lazy-validation
           >
             <v-card-title class="justify-center">
-                <h1 class="text-center my-16">Register</h1>
+                <h1 class="text-center my-16">Edit Account</h1>
             </v-card-title>
 
             <div class="input-center">
@@ -39,6 +39,7 @@
                   outlined
                   label="First name"
                   :rules="firstNameRules"
+                  height="20"
                   style="width: 400px"
               >
               </v-text-field>
@@ -110,8 +111,14 @@ import 'firebase/firestore'
 import 'firebase/auth'
 
 export default {
-    name: 'Register',
+    name: 'EditAccountForm',
+    props: {
+        userData: Object,
+        userId: String
+    },
     data: () => ({ 
+        user: Object,
+        userId: '',
         valid: false,
         showPass: false,
         showPass2: false,
@@ -151,7 +158,6 @@ export default {
                 await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
                     .then((returnedUser) => {
                         newUserId = returnedUser.user.uid
-                        console.log(returnedUser.user)
                     })
                     .catch(err => {
                         this.snackbarTitle = 'Error'
@@ -162,16 +168,12 @@ export default {
                             this.showSnackbar = false
                         }, 3000)
                     })
-
+                    
                 await dbUsers.doc(newUserId).set({
                     userInfo: {
                       firstName: this.firstName,
-                      lastName: this.lastName,
-                    },
-                    occupation: '',
-                    maritalStatus: '',
-                    income: [],
-                    deductions: []
+                      lastName: this.lastName
+                    }
                 })
                     .then(async () => {
                         const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -196,6 +198,7 @@ export default {
         }
     },
     created() {
+
         this.confirmPasswordRules = [
             v => !!v || 'Confirmation cannot be empty.',
             v => v === this.password || 'Password does not match.',
